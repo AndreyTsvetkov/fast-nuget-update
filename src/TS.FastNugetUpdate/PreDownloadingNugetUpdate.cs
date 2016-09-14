@@ -4,6 +4,7 @@ using System.Linq;
 using Functional.Maybe;
 using Ionic.Zip;
 using JetBrains.Annotations;
+using MoreLinq;
 
 namespace TS.FastNugetUpdate
 {
@@ -59,7 +60,16 @@ namespace TS.FastNugetUpdate
 			if (Directory.Exists(destination))
 				Directory.Delete(destination, true);
 			using (var zip = new ZipFile(package))
-				zip.ExtractAll(destination);
+				zip.ExtractAll(destination, ExtractExistingFileAction.OverwriteSilently);
+			var rels = Path.Combine(destination, "_rels");
+			if (Directory.Exists(rels))
+				Directory.Delete(rels, true);
+			var libs = Path.Combine(destination, "lib");
+			Directory
+				.GetDirectories(libs)
+				.Select(d => d.ToLowerInvariant())
+				.Where(d => d.Contains("%2b"))
+				.ForEach(d => Directory.Move(d, d.Replace("%2b", "+")));
 		}
 	}
 }
