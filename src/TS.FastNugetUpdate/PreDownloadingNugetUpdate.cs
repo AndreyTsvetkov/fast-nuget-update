@@ -8,7 +8,7 @@ namespace TS.FastNugetUpdate
 		public PreDownloadingNugetUpdate([NotNull]string sources, [NotNull]string name, [NotNull]string version,
 			[NotNull]Action<string> message, [NotNull]Action<string> error, INugetUpdate other) { }
 
-		public bool Apply()
+		public bool Apply(string root)
 		{
 			return false;
 		}

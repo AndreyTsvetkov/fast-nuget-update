@@ -28,7 +28,7 @@ namespace TS.FastNugetUpdate
 						try
 						{
 							return update
-								.Apply()
+								.Apply(Environment.CurrentDirectory)
 								.Then(0)
 								.OrElse(1);
 						}

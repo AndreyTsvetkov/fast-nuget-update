@@ -61,13 +61,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="demo\packages.config" />
+    <None Include="demo\packages.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="repo\My.Package\My.Package.0.0.1.nupkg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="demo\demo.csproj" />
+    <Content Include="demo\demo.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

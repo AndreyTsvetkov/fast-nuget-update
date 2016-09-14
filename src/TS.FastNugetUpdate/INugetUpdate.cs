@@ -2,7 +2,7 @@
 {
 	public interface INugetUpdate
 	{
-		bool Apply();
+		bool Apply(string root);
 	}
 
 	public class FakeUpdate : INugetUpdate
@@ -13,6 +13,6 @@
 			_success = success;
 		}
 
-		public bool Apply() => _success;
+		public bool Apply(string root) => _success;
 	}
 }
