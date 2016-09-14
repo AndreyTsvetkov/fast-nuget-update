@@ -21,6 +21,7 @@ namespace TS.FastNugetUpdate.Tests
 			Assert.IsTrue(File.ReadAllText(packagesFile).Contains("1.3.1.7"));
 		}
 
+
 		[TestMethod]
 		public void Apply_RemainsLinesNumberTheSame()
 		{ 
@@ -58,5 +59,18 @@ namespace TS.FastNugetUpdate.Tests
 			Assert.IsTrue(projectFile.Contains(@"Reference Include=""Functional.Maybe, Version=1.0.7.0"""));
 			Assert.IsTrue(projectFile.Contains(@"packages\Functional.Maybe.1.0.8"));
 		}
+
+		[TestMethod]
+		public void Apply_AssumesPackagesFolderIsOneLevelUp()
+		{
+			var fileRoot = Environment.CurrentDirectory;
+
+			var sut = new NugetUpdate("Functional.Maybe", "1.0.8", Console.Out.WriteLine, Console.Error.WriteLine);
+
+			Assert.IsTrue(sut.Apply(fileRoot));
+			var projectFile = File.ReadAllText(Path.Combine(fileRoot, "demo", "demo.csproj"));
+			Assert.IsTrue(projectFile.Contains(@"..\packages\Functional.Maybe.1.0.8"));
+		}
+		
 	}
 }

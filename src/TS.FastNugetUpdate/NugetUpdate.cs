@@ -82,7 +82,7 @@ namespace TS.FastNugetUpdate
 			);
 			return content => regex.Replace(content,
 				m => $@"<Reference Include=""{name}, Version={assemblyVersion}"">
-      <HintPath>packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
+      <HintPath>..\packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
       <Private>True</Private>
     </Reference>"
 			);
