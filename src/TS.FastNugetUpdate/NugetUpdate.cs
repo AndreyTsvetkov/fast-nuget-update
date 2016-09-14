@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Functional.Maybe;
@@ -14,40 +15,66 @@ namespace TS.FastNugetUpdate
 		private readonly string _name;
 		private readonly string _version;
 		private readonly Action<string> _message;
+		private readonly Action<string> _error;
 
-		public NugetUpdate([NotNull]string name, [NotNull]string version, [NotNull]Action<string> message)
+		public NugetUpdate([NotNull]string name, [NotNull]string version, 
+			[NotNull]Action<string> message, [NotNull]Action<string> error)
 		{
 			_name = name;
 			_version = version;
 			_message = message;
+			_error = error;
 		}
 
 		public bool Apply(string root)
 		{
-			var csprojs = Directory.GetFiles(root, "*.csproj", SearchOption.AllDirectories);
-			var packages = Directory.GetFiles(root, "packages.config", SearchOption.AllDirectories);
-			var projects = (
-				from csproj in csprojs
-				let folder = Path.GetDirectoryName(csproj)
-				let maybeConfig = packages.FirstMaybe(InSame(folder))
-				where maybeConfig.HasValue
-				let config = maybeConfig.Value
-				select new {csproj, config}
-			).ToArray();
 			var fixNugetReference = FixNugetReference(_name, _version);
-			var fixAssemblyReference = FixAssemblyReference(_name, _version);
-			projects.ForEach(p =>
-			{
-				_message($"Processing {p.config}");
-				Rewrite(p.config, fixNugetReference);
-				_message($"Processing {p.csproj}");
-				Rewrite(p.csproj, fixAssemblyReference);
-			});
-			return projects.Any();
+			var realAssemblyVersion = ExtractAssemblyVersion(root, _name, _version);
+			return realAssemblyVersion
+				.Select(assemblyVersion =>
+				{
+					var fixAssemblyReference = FixAssemblyReference(_name, _version, assemblyVersion);
+					var csprojs = Directory.GetFiles(root, "*.csproj", SearchOption.AllDirectories);
+					var packages = Directory.GetFiles(root, "packages.config", SearchOption.AllDirectories);
+					var projects = (
+						from csproj in csprojs
+						let folder = Path.GetDirectoryName(csproj)
+						let maybeConfig = packages.FirstMaybe(InSame(folder))
+						where maybeConfig.HasValue
+						let config = maybeConfig.Value
+						select new {csproj, config}
+					).ToArray();
+					projects.ForEach(p =>
+					{
+						_message($"Processing {p.config}");
+						Rewrite(p.config, fixNugetReference);
+						_message($"Processing {p.csproj}");
+						Rewrite(p.csproj, fixAssemblyReference);
+					});
+					return projects.Any();
+				})
+				.OrElse(() =>
+				{
+					_error($"Couldn't find the assembly for package {_name}.{_version} in {root}");
+					return false;
+				});
+
 		}
 
+		private Maybe<string> ExtractAssemblyVersion(string root, string name, string version) =>
+			Directory
+				.GetFiles(Path.Combine(root, "packages", $"{name}.{version}"), $"{name}.dll", 
+					SearchOption.AllDirectories)
+				.FirstMaybe()
+				.Select(file =>
+					Assembly
+						.LoadFile(file)
+						.GetName()
+						.Version
+						.ToString());
+
 		[Pure]
-		private static Func<string, string> FixAssemblyReference(string name, string version)
+		private static Func<string, string> FixAssemblyReference(string name, string packageVersion, string assemblyVersion)
 		{
 			var regex = new Regex(
 				$@"<Reference Include=""{RegexEncode(name)}, Version=[^""]+"">\s*" +
@@ -55,8 +82,8 @@ namespace TS.FastNugetUpdate
 				$@"<Private>True</Private>\s*</Reference>"
 			);
 			return content => regex.Replace(content,
-				m => $@"					<Reference Include=""{name}, Version={version}"">
-						<HintPath>packages\{name}.{version}\{m.Groups["restPath"].Value}</HintPath>
+				m => $@"					<Reference Include=""{name}, Version={assemblyVersion}"">
+						<HintPath>packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
 						<Private>True</Private>
 					</Reference>"
 			);
