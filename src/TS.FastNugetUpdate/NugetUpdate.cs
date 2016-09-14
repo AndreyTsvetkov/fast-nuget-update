@@ -53,8 +53,7 @@ namespace TS.FastNugetUpdate
 				$@"<HintPath>packages\\{RegexEncode(name)}\.\d+\.\d+\.\d+(\.\d+)?\\(?<restPath>[^<]+)</HintPath>\s*" + 
 				$@"<Private>True</Private>\s*</Reference>");
 			return content => regex.Replace(content,
-				m => $@"
-					<Reference Include=""{name}, Version={version}"">
+				m => $@"					<Reference Include=""{name}, Version={version}"">
 						<HintPath>packages\{name}.{version}\{m.Groups["restPath"].Value}</HintPath>
 						<Private>True</Private>
 					</Reference>"
