@@ -58,7 +58,6 @@ namespace TS.FastNugetUpdate
 					_error($"Couldn't find the assembly for package {_name}.{_version} in {root}");
 					return false;
 				});
-
 		}
 
 		private Maybe<string> ExtractAssemblyVersion(string root, string name, string version) =>
@@ -82,10 +81,10 @@ namespace TS.FastNugetUpdate
 				$@"<Private>True</Private>\s*</Reference>"
 			);
 			return content => regex.Replace(content,
-				m => $@"					<Reference Include=""{name}, Version={assemblyVersion}"">
-						<HintPath>packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
-						<Private>True</Private>
-					</Reference>"
+				m => $@"<Reference Include=""{name}, Version={assemblyVersion}"">
+      <HintPath>packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
+      <Private>True</Private>
+    </Reference>"
 			);
 		}
 
