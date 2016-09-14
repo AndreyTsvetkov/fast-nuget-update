@@ -3,6 +3,8 @@ A simple command line utility to update nuget package installed to many projects
 
 ## usage
 
+The tool must be run from the solution folder, assuming the `packages` folder is the child of current and so are the project folders. 
+
   -n, --name                Required. name of the package to find
 
   -v, --version             Required. version of the package to set
