@@ -10,7 +10,7 @@ namespace TS.FastNugetUpdate
 		[Option('v', "version", HelpText = "version of the package to set", Required = true)]
 		public string Version { get; set; }
 
-		[Option('s', "skip-downloading", HelpText = "if set, no attempts would occur to download the package from package sources in the app.config file", Required = true)]
+		[Option('s', "skip-downloading", HelpText = "if set, no attempts would occur to download the package from package sources in the app.config file")]
 		public bool DontTryDownloadingPackage { get; set; }
 	}
 }
