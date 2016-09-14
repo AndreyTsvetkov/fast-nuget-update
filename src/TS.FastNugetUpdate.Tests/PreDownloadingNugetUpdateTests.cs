@@ -12,7 +12,7 @@ namespace TS.FastNugetUpdate.Tests
 	[TestClass]
 	public class PreDownloadingNugetUpdateTests
 	{
-		[TestMethod]
+		//[TestMethod]
 		public void ApplyTest()
 		{
 			var fileRoot = Environment.CurrentDirectory;
