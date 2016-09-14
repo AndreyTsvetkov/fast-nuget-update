@@ -17,7 +17,7 @@ namespace TS.FastNugetUpdate.Tests
 		{
 			var fileRoot = Environment.CurrentDirectory;
 
-			var sut = new NugetUpdate("My.Package", "0.0.2", s => { }, s => { });
+			var sut = new NugetUpdate("My.Package", "0.0.2", Console.Out.WriteLine);
 
 			Assert.IsTrue(sut.Apply(fileRoot));
 			var projectFile = Path.Combine(fileRoot, "demo", "demo.csproj");
@@ -38,7 +38,7 @@ namespace TS.FastNugetUpdate.Tests
 				packages = File.ReadAllLines(packagesFile).Length
 			};
 
-			var sut = new NugetUpdate("My.Package", "0.0.2", s => { }, s => { });
+			var sut = new NugetUpdate("My.Package", "0.0.2", Console.Out.WriteLine);
 
 			sut.Apply(fileRoot);
 

@@ -14,10 +14,7 @@ namespace TS.FastNugetUpdate
 				.MapResult(
 					options =>
 					{
-						INugetUpdate update = new NugetUpdate(
-							options.PackageName, options.Version, 
-							Console.Out.WriteLine, Console.Error.WriteLine
-						);
+						INugetUpdate update = new NugetUpdate(options.PackageName, options.Version, Console.Out.WriteLine);
 						if (!options.DontTryDownloadingPackage)
 							update = new PreDownloadingNugetUpdate(
 								ConfigurationManager.AppSettings["packageSources"],
