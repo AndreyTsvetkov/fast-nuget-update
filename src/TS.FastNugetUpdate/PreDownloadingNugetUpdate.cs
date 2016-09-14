@@ -56,6 +56,8 @@ namespace TS.FastNugetUpdate
 
 		private static void Restore(string package, string destination)
 		{
+			if (Directory.Exists(destination))
+				Directory.Delete(destination, true);
 			using (var zip = new ZipFile(package))
 				zip.ExtractAll(destination);
 		}
