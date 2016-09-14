@@ -61,7 +61,7 @@ namespace TS.FastNugetUpdate.Tests
 		}
 
 		[TestMethod]
-		public void Apply_AssumesPackagesFolderIsOneLevelUp()
+		public void Apply_SavesPackageLocations()
 		{
 			var fileRoot = Environment.CurrentDirectory;
 
@@ -71,6 +71,17 @@ namespace TS.FastNugetUpdate.Tests
 			var projectFile = File.ReadAllText(Path.Combine(fileRoot, "demo", "demo.csproj"));
 			Assert.IsTrue(projectFile.Contains(@"..\packages\Functional.Maybe.1.0.8"));
 		}
-		
+
+		[TestMethod]
+		public void Apply_AlsoUpdatesReferencesToCompanionDlls()
+		{
+			var fileRoot = Environment.CurrentDirectory;
+
+			var sut = new NugetUpdate("MK.Core", "1.3.1.7", Console.Out.WriteLine, Console.Error.WriteLine);
+
+			Assert.IsTrue(sut.Apply(fileRoot));
+			var projectFile = File.ReadAllText(Path.Combine(fileRoot, "demo", "demo.csproj"));
+			Assert.IsTrue(projectFile.Contains(@"packages\MK.Core.1.3.1.7\lib\net45\Companion.dll"));
+		}
 	}
 }

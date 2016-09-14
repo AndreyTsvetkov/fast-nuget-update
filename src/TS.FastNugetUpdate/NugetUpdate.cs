@@ -75,17 +75,18 @@ namespace TS.FastNugetUpdate
 		[Pure]
 		private static Func<string, string> FixAssemblyReference(string name, string packageVersion, string assemblyVersion)
 		{
-			var regex = new Regex(
-				$@"<Reference Include=""{RegexEncode(name)}, Version=[^""]+"">\s*" +
-				$@"<HintPath>packages\\{RegexEncode(name)}\.\d+\.\d+\.\d+(\.\d+)?\\(?<restPath>[^<]+)</HintPath>\s*" + 
-				$@"<Private>True</Private>\s*</Reference>"
-			);
-			return content => regex.Replace(content,
-				m => $@"<Reference Include=""{name}, Version={assemblyVersion}"">
-      <HintPath>..\packages\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>
-      <Private>True</Private>
-    </Reference>"
-			);
+			var reference = new Regex(
+				$@"<Reference Include=""{RegexEncode(name)}, Version=[^""]+"">");
+			var hintPath = new Regex(
+				$@"<HintPath>(?<packageRoot>[\.\w\\]*?packages)\\{RegexEncode(name)}\.\d+\.\d+\.\d+(\.\d+)?\\(?<restPath>[^<]+)</HintPath>");
+
+			return content =>
+			{
+				var referenceProcessed = reference.Replace(content, $@"<Reference Include=""{name}, Version={assemblyVersion}"">");
+				var hintPathProcessed = hintPath.Replace(referenceProcessed, m =>
+					$@"<HintPath>{m.Groups["packageRoot"].Value}\{name}.{packageVersion}\{m.Groups["restPath"].Value}</HintPath>");
+				return hintPathProcessed;
+			};
 		}
 
 		[Pure]
