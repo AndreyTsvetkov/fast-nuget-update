@@ -18,7 +18,7 @@ namespace TS.FastNugetUpdate
 		private readonly INugetUpdate _other;
 
 		public PreDownloadingNugetUpdate([NotNull]string sources, [NotNull]string name, [NotNull]string version,
-			[NotNull]Action<string> message, [NotNull]Action<string> error, INugetUpdate other)
+			[NotNull]Action<string> message, [NotNull]Action<string> error, [NotNull]INugetUpdate other)
 		{
 			_sources = sources
 				.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries)

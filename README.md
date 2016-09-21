@@ -1,4 +1,4 @@
-# fast-nuget-update ![build static](https://ci.appveyor.com/api/projects/status/ckwopqwiws29cxmn/branch/master?svg=true)
+# fast-nuget-update [![build static](https://ci.appveyor.com/api/projects/status/ckwopqwiws29cxmn/branch/master?svg=true)](https://ci.appveyor.com/project/AndreyTS/fast-nuget-update)
 A command line utility for bulk updating nuget packages references.   
 
 
