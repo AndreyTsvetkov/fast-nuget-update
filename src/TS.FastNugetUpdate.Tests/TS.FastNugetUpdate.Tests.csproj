@@ -65,9 +65,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="demo-with-beta\packages.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="demo\packages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="demo-with-beta\demo-with-beta.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="packages\Functional.Maybe.1.0.8\lib\portable-net40+win+MonoAndroid10+xamarinios10+MonoTouch10\Functional.Maybe.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
