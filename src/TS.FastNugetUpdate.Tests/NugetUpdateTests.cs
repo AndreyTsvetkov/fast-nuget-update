@@ -30,7 +30,7 @@ namespace TS.FastNugetUpdate.Tests
 
 			Assert.IsTrue(sut.Apply(fileRoot));
 			var projectFile = Path.Combine(fileRoot, "demo-with-beta", "demo-with-beta.csproj");
-			var packagesFile = Path.Combine(fileRoot, "demo-with-beta", "packages-with-beta.config");
+			var packagesFile = Path.Combine(fileRoot, "demo-with-beta", "packages.config");
 			Assert.IsTrue(File.ReadAllText(projectFile).Contains("1.0.8"));
 			Assert.IsTrue(File.ReadAllText(packagesFile).Contains("1.0.8"));
 		}
