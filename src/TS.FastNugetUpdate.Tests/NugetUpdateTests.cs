@@ -22,6 +22,22 @@ namespace TS.FastNugetUpdate.Tests
 		}
 
 		[TestMethod]
+		public void Apply_LeftOtherReferencesUntouched()
+		{
+			var fileRoot = Environment.CurrentDirectory;
+
+			var sut = new NugetUpdate("MK.Core", "1.3.1.7", Console.Out.WriteLine, Console.Error.WriteLine);
+
+			sut.Apply(fileRoot);
+
+			var projectFile = Path.Combine(fileRoot, "demo", "demo.csproj");
+			var packagesFile = Path.Combine(fileRoot, "demo", "packages.config");
+			Assert.IsTrue(File.ReadAllText(projectFile).Contains("MK.Core.DB, Version=1.4.0.5"));
+			Assert.IsTrue(File.ReadAllText(projectFile).Contains(@"packages\MK.Core.DB.1.4.0.5\lib\net45\MK.Core.DB.dll"));
+			Assert.IsTrue(File.ReadAllText(packagesFile).Contains(@"<package id=""MK.Core.DB"" version=""1.4.0.5"" />"));
+		}
+
+		[TestMethod]
 		public void Apply_ChangesBetaVersionToCorrect()
 		{
 			var fileRoot = Environment.CurrentDirectory;

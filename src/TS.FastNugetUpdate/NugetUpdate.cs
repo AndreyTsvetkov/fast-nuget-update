@@ -78,7 +78,7 @@ namespace TS.FastNugetUpdate
 			var reference = new Regex(
 				$@"<Reference Include=""{RegexEncode(name)}, Version=[^""]+"">");
 			var hintPath = new Regex(
-				$@"<HintPath>(?<packageRoot>[\.\w\\]*?packages)\\{RegexEncode(name)}\..*?\\(?<restPath>[^<]+)</HintPath>");
+				$@"<HintPath>(?<packageRoot>[\.\w\\]*?packages)\\{RegexEncode(name)}\.\d.*?\\(?<restPath>[^<]+)</HintPath>");
 
 			return content =>
 			{

@@ -35,8 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Functional.Maybe, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\TS.FastNugetUpdate\packages\Functional.Maybe.1.0.6\lib\portable-net40+win+MonoAndroid10+xamarinios10+MonoTouch10\Functional.Maybe.dll</HintPath>
+    <Reference Include="Functional.Maybe, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Functional.Maybe.1.1.0\lib\portable40-net40+win8\Functional.Maybe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
